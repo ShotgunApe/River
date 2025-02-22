@@ -67,3 +67,12 @@ body {
   padding: 2px;
   opacity: 0.9;
 }
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: black;
+}
+
