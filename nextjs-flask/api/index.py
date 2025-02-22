@@ -10,9 +10,18 @@ app = Flask(__name__)
 @app.route("/api/get-weather", methods=['GET'])
 def weather():
     lat = str(request.args.get('lat'))
-    lon = str(request.args['lon'])
-    file = str(requests.get(f'https://api.weather.gov/points/{lat},{lon}').content)
-    return file
+    lon = str(request.args.get('lon'))
+    response = requests.get(f'https://api.weather.gov/points/{lat},{lon}')
+    data = response.json()
+    return data
+
+@app.route("/api/get-weather", methods=['GET'])
+def weather():
+    lat = str(request.args.get('lat'))
+    lon = str(request.args.get('lon'))
+    response = requests.get(f'https://api.weather.gov/points/{lat},{lon}')
+    data = response.json()
+    return data
 
 
 # Load the trained model

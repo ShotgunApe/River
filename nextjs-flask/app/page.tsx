@@ -7,7 +7,7 @@ import chroma from 'chroma-js';
 
 import 'leaflet/dist/leaflet.css';
 
-import { getReq, getPredict } from './utils/api'
+import { getReq} from './utils/api'
 
 
 // Extended interfaces for proper typing
@@ -319,9 +319,8 @@ const style = (feature: GeoJSON.Feature): L.PathOptions => {
             .setLatLng(popLocation)
             .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
             .openOn(map);
-            var tmp = getReq(e.latlng.lat, e.latlng.lng)
-            console.log(tmp)
-            getPredict(tmp)
+            getReq(e.latlng.lat, e.latlng.lng)
+
         });
         }
       } catch (error) {
