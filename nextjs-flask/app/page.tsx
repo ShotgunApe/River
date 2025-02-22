@@ -94,7 +94,7 @@ const MapComponent = () => {
                    risk > 30  ? '#FFE68A' :
                    risk > 20  ? '#FEE08F' :
                    risk > 10  ? 'FFEDA0'  :
-                                 '#B8E186';
+                                '#B8E186';
           };
 
           const style = (feature: GeoJSON.Feature): L.PathOptions => {
@@ -141,7 +141,7 @@ const MapComponent = () => {
             map.fitBounds(e.target.getBounds());
           };
 
-          // Dont touch
+          // Dont touch (Least Updated but works)
           /*
           const onEachFeature = (_feature: GeoJSON.Feature, layer: GeoJSONLayer) => {
             layer.on({
@@ -152,7 +152,7 @@ const MapComponent = () => {
           };
           */
           
-          // Dont touch
+          // Dont touch (One extra feature)
           /*
           const onEachFeature = (feature: GeoJSON.Feature, layer: GeoJSONLayer) => {
             layer.on({
