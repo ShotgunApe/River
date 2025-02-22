@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 
 import { getReq } from './utils/api'
 
+
 // Extended interfaces for proper typing
 interface CustomControl extends Control {
   _div?: HTMLElement;
@@ -85,23 +86,20 @@ const MapComponent = () => {
             bounds: californiaBounds
           }).addTo(map);
 
+          // Working getcolor and style
           const getColor = (risk: number): string => {
-            return risk > 100 ? '#800026' :
-                   risk > 90  ? '#BD0026' :
-                   risk > 80  ? '#E31A1C' :
-                   risk > 70  ? '#FC4E2A' :
-                   risk > 60  ? '#FD8D3C' :
-                   risk > 50  ? '#FEB24C' :
-                   risk > 40  ? '#FEC764' :
-                   risk > 30  ? '#FFE68A' :
-                   risk > 20  ? '#FEE08F' :
-                   risk > 10  ? 'FFEDA0'  :
-                                '#B8E186';
-          };
+            return         risk > 4  ? '#8B0000' :
+                           risk > 3  ? '#FF0000' :
+                           risk > 2  ? '#FFA500' :
+                           risk > 1  ? '#FFFF00' :
+                           risk > 0  ? '#32CD32' :
+                                '#006400';
+          }; 
+
 
           const style = (feature: GeoJSON.Feature): L.PathOptions => {
             return {
-              fillColor: getColor(feature.properties?.riskfactor || 0),
+              fillColor: getColor(feature.properties?.riskfactor || 1),
               weight: 2,
               opacity: 1,
               color: 'white',
@@ -109,6 +107,9 @@ const MapComponent = () => {
               fillOpacity: 0.7
             };
           };
+          
+    
+
 
           // Initialize info control using the custom class
           const info = new InfoControl({ position: 'topright' });
@@ -223,20 +224,51 @@ const MapComponent = () => {
           class LegendControl extends L.Control {
             onAdd() {
               const div = L.DomUtil.create('div', 'info legend');
-              const grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+              const grades = [1, 2, 3, 4];
               const labels = [];
               
               div.innerHTML = '<h4>Fire Likelihood </h4><div style = background: linear-gradient(to right, #FFEDA0, #FED976, #FEB24C, #FD8D3C, #FC4E2A, #E31A1C, #BD0026, #800026); height: 15px; margin-bottom: 5px;"></div>';
               
+              // Old Grading System
+              /*
               for (let i = 0; i < grades.length; i++) {
                 labels.push(
                   '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-                  grades[i] + (grades[i + 1] ? '–' + grades[i + 1] + '%' : '+')
+                  grades[i] 
                 );
               }
-              
+              */
+
+              for (let i = 0; i < grades.length; i++) { 
+                let labelText = "";
+                
+                switch (grades[i]) {
+                    case 1:
+                        labelText = "Safe";
+                        break;
+                    case 2:
+                        labelText = "Caution";
+                        break;
+                    case 3:
+                        labelText = "Warning";
+                        break;
+                    case 4:
+                        labelText = "Danger";
+                        break;
+                    default:
+                        labelText = "Unknown"; // In case there are unexpected values
+                }
+            
+                labels.push(
+                    '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+                    grades[i] + " - " + labelText
+                );
+            }
+            
+
               div.innerHTML += labels.join('<br>');
-              div.innerHTML += '<h4>Forecast</h4><div id="forecast" style="padding: 5px; background: #f8f8f8; border-radius: 5px;">Loading...</div>';
+              // Forecast bar
+             // div.innerHTML += '<h4>Forecast</h4><div id="forecast" style="padding: 5px; background: #f8f8f8; border-radius: 5px;">Loading...</div>';
               return div;
             }
           }
