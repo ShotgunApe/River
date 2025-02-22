@@ -6,7 +6,7 @@ import { Waves } from "lucide-react";
 
 import 'leaflet/dist/leaflet.css';
 
-import { getReq } from './utils/api'
+import { getReq, getPredict } from './utils/api'
 
 // Extended interfaces for proper typing
 interface CustomControl extends Control {
@@ -257,6 +257,7 @@ const MapComponent = () => {
             .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
             .openOn(map);
             getReq(e.latlng.lat, e.latlng.lng)
+            getPredict()
         });
         }
       } catch (error) {
