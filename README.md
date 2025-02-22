@@ -1,6 +1,8 @@
 # River
 WooHack '25
 
+## Setting Up
+
 To manage dependencies, Python uses virtual environments to prevent packages from being installed globally.
 
 ### Windows (PowerShell)
@@ -16,3 +18,7 @@ To manage dependencies, Python uses virtual environments to prevent packages fro
 2. Create a virtual environment with ```python3 -m venv .venv```
 3. Activate using ```source .venv/bin/activate```
 4. Install Flask with ```pip install flask```
+
+## Testing
+
+```npm run dev``` starts the server on ```localhost:3000```.
