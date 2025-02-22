@@ -3,11 +3,13 @@ import { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { Map as LeafletMap, LatLngBoundsExpression, LatLngExpression, Control, GeoJSON } from 'leaflet';
 import { Waves } from "lucide-react";
-import chroma from 'chroma-js';
+
+//unused for now
+//import chroma from 'chroma-js';
 
 import 'leaflet/dist/leaflet.css';
 
-import { getReq } from './utils/api'
+import { getReq, getPredict } from './utils/api'
 
 // Extended interfaces for proper typing
 interface CustomControl extends Control {
@@ -276,8 +278,8 @@ const style = (feature: GeoJSON.Feature): L.PathOptions => {
             .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
             .openOn(map);
             var tmp = getReq(e.latlng.lat, e.latlng.lng)
-            //console.log(tmp)
-            getPredict(tmp)
+            console.log(tmp)
+            //getPredict(tmp)
         });
         }
       } catch (error) {

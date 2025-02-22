@@ -1,4 +1,4 @@
-export const getReq = async function (lat: string, lon: string) {
+export const getReq = async function (lat: string | number, lon: string | number) {
     if (lat && lon) {
         var latTwo = lat.toString().match(/^-?\d+(?:\.\d{0,4})?/)![0]
         var lonTwo = lon.toString().match(/^-?\d+(?:\.\d{0,4})?/)![0]
