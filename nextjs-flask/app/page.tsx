@@ -50,14 +50,14 @@ const MapComponent = () => {
           }
 
           const californiaBounds: LatLngBoundsExpression = [
-            [31.5, -125],
-            [42.5, -113.5]
+            [31.5, -325],
+            [42.5, -60.5]
           ];
 
           const map = L.map('map', {
             center: [37.2, -119.5],
             zoom: 5.5,
-            minZoom: 5,
+            minZoom: 5.75,
             maxZoom: 10,
             maxBounds: californiaBounds,
             maxBoundsViscosity: 0.8
@@ -209,6 +209,7 @@ const DynamicMap = dynamic(() => Promise.resolve(MapComponent), {
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <h1>Heatmap by Rivers</h1>
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
         <DynamicMap />
       </div>
