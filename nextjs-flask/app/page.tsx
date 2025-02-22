@@ -87,7 +87,73 @@ const MapComponent = () => {
             bounds: californiaBounds
           }).addTo(map);
 
+          
+          // New way to change counties colors 
+          // Hard coding
+          const countyColors: Record<string, number> = {
+            "Alameda": 3,
+            "Alpine": 2,
+            "Amador": 1,
+            "Butte": 4,
+            "Calaveras": 2,
+            "Colusa": 3,
+            "Contra Costa": 1,
+            "Del Norte": 4,
+            "El Dorado": 2,
+            "Fresno": 3,
+            "Glenn": 1,
+            "Humboldt": 4,
+            "Imperial": 2,
+            "Inyo": 3,
+            "Kern": 4,
+            "Kings": 1,
+            "Lake": 2,
+            "Lassen": 3,
+            "Los Angeles": 4,
+            "Madera": 1,
+            "Marin": 2,
+            "Mariposa": 3,
+            "Mendocino": 4,
+            "Merced": 1,
+            "Modoc": 2,
+            "Mono": 3,
+            "Monterey": 4,
+            "Napa": 1,
+            "Nevada": 2,
+            "Orange": 3,
+            "Placer": 4,
+            "Plumas": 1,
+            "Riverside": 2,
+            "Sacramento": 3,
+            "San Benito": 4,
+            "San Bernardino": 1,
+            "San Diego": 2,
+            "San Francisco": 3,
+            "San Joaquin": 4,
+            "San Luis Obispo": 1,
+            "San Mateo": 2,
+            "Santa Barbara": 3,
+            "Santa Clara": 4,
+            "Santa Cruz": 1,
+            "Shasta": 2,
+            "Sierra": 3,
+            "Siskiyou": 4,
+            "Solano": 1,
+            "Sonoma": 2,
+            "Stanislaus": 3,
+            "Sutter": 4,
+            "Tehama": 1,
+            "Trinity": 2,
+            "Tulare": 3,
+            "Tuolumne": 4,
+            "Ventura": 1,
+            "Yolo": 2,
+            "Yuba": 3
+          };
+
+
           // Working getcolor and style
+          
           const getColor = (risk: number): string => {
             return         risk > 4  ? '#8B0000' :
                            risk > 3  ? '#FF0000' :
@@ -97,8 +163,8 @@ const MapComponent = () => {
                                 '#006400';
           }; 
 
-
-          
+        // working style (don't touch)
+          /*
           const style = (feature: GeoJSON.Feature): L.PathOptions => {
             return {
               fillColor: getColor(feature.properties?.riskfactor || 1),
@@ -109,33 +175,23 @@ const MapComponent = () => {
               fillOpacity: 0.7
             };
           };
-
+          */
     
+          // New
+          const style = (feature: GeoJSON.Feature): L.PathOptions => {
+            const countyName = feature.properties?.CountyName; 
+            const riskLevel = countyColors[countyName] ?? feature.properties?.riskfactor ?? 1; // Use assigned risk or default
           
+            return {
+              fillColor: getColor(riskLevel), // Automatically sets the color
+              weight: 2,
+              opacity: 1,
+              color: 'white',
+              dashArray: '3',
+              fillOpacity: 0.7
+            };
+          };
 
-/*
-const getColor = (risk: number): string => {
-  // Define color stops for risk levels
-  const colors = ['#32CD32', '#FFFF00', '#FFA500', '#FF0000', '#8B0000'];
-
-  // Define the scale (0-5 risk factor range)
-  const scale = chroma.scale(colors).domain([0, 5]);
-
-  // Ensure risk value stays in the range
-  return scale(Math.min(Math.max(risk, 0), 5)).hex();
-};
-
-const style = (feature: GeoJSON.Feature): L.PathOptions => {
-  return {
-    fillColor: getColor(feature.properties?.riskfactor || 0),
-    weight: 2,
-    opacity: 1,
-    color: 'white',
-    dashArray: '3',
-    fillOpacity: 0.7
-  };
-};
-*/
 
           // Initialize info control using the custom class
           const info = new InfoControl({ position: 'topright' });
@@ -201,6 +257,9 @@ const style = (feature: GeoJSON.Feature): L.PathOptions => {
           };
           */
 
+          // Don't touch. Thanks :)
+          // Latest onEachFeature 
+          
           const onEachFeature = (feature: GeoJSON.Feature, layer: GeoJSONLayer) => {
             // Attach event listeners for hover effects
             layer.on({
@@ -230,9 +289,9 @@ const style = (feature: GeoJSON.Feature): L.PathOptions => {
               });
             }
           };
+          
 
-
-
+          
 
           try {
             const response = await fetch('/cali-county-bounds.json');
