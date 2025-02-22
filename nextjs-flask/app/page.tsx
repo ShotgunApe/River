@@ -6,8 +6,7 @@ import { Waves } from "lucide-react";
 
 import 'leaflet/dist/leaflet.css';
 
-import { getReq, getPredict } from './utils/api'
-
+import { getReq } from './utils/api'
 
 // Extended interfaces for proper typing
 interface CustomControl extends Control {
@@ -45,21 +44,19 @@ const MapComponent = () => {
               this.update();
               return this._div;
             }
-
-            // Dont touch. Thanks :)
             /*
             update(props?: any) {
               if (!this._div) return;
-              this._div.innerHTML = '<h4>California WildFire Watch</h4>' +
+              this._div.innerHTML = '<h4>California Counties WildFire Watch</h4>' +
                 (props ? '<b>' + props.name + '</b><br />' + props.risk + '%' : 'Hover over a county');
             }
             */
 
             update(props?: any) {
               if (!this._div) return;
-              this._div.innerHTML = '<h4>California Wild Fire Watch</h4>'+
-           // (props ? `<b>County: ${props.name}</b><br>Fire Likelihood: ${props.risk}%` : 'Hover over a county');
-              (props ? `<b>County: ${props.CountyName}</b><br>Fire Likelihood: ${props.risk}%` : 'Hover over a county');
+              this._div.innerHTML = '<h4>California Wild Fire Risk</h4>' +
+                (props ? `<b>County: ${props.name}</b><br>Risk: ${props.risk}%` : 'Hover over a county');
+
             }
 
           }
@@ -86,20 +83,23 @@ const MapComponent = () => {
             bounds: californiaBounds
           }).addTo(map);
 
-          // Working getcolor and style
           const getColor = (risk: number): string => {
-            return         risk > 4  ? '#8B0000' :
-                           risk > 3  ? '#FF0000' :
-                           risk > 2  ? '#FFA500' :
-                           risk > 1  ? '#FFFF00' :
-                           risk > 0  ? '#32CD32' :
-                                '#006400';
-          }; 
-
+            return risk > 100 ? '#800026' :
+                   risk > 90  ? '#BD0026' :
+                   risk > 80  ? '#E31A1C' :
+                   risk > 70  ? '#FC4E2A' :
+                   risk > 60  ? '#FD8D3C' :
+                   risk > 50  ? '#FEB24C' :
+                   risk > 40  ? '#FEC764' :
+                   risk > 30  ? '#FFE68A' :
+                   risk > 20  ? '#FEE08F' :
+                   risk > 10  ? 'FFEDA0'  :
+                                '#B8E186';
+          };
 
           const style = (feature: GeoJSON.Feature): L.PathOptions => {
             return {
-              fillColor: getColor(feature.properties?.riskfactor || 1),
+              fillColor: getColor(feature.properties?.riskfactor || 0),
               weight: 2,
               opacity: 1,
               color: 'white',
@@ -107,9 +107,6 @@ const MapComponent = () => {
               fillOpacity: 0.7
             };
           };
-          
-    
-
 
           // Initialize info control using the custom class
           const info = new InfoControl({ position: 'topright' });
@@ -180,13 +177,10 @@ const MapComponent = () => {
             layer.on({
               mouseover: (e) => {
                 highlightFeature(e);
-                if (feature.properties?.Name) {
                 info.update({ 
-               //name: feature.properties?.name || "Unknown County", 
-                 name: feature.properties?.County.Name || "Unknown County",
+                  name: feature.properties?.name || "Unknown County", 
                   risk: feature.properties?.riskfactor || "N/A" 
                 });
-              }
               },
               mouseout: (e) => {
                 resetHighlight(e);
@@ -204,10 +198,7 @@ const MapComponent = () => {
               });
             }
           };
-          
-
-
-
+        
           try {
             const response = await fetch('/cali-county-bounds.json');
             const data: GeoJSON.FeatureCollection = await response.json();
@@ -224,51 +215,20 @@ const MapComponent = () => {
           class LegendControl extends L.Control {
             onAdd() {
               const div = L.DomUtil.create('div', 'info legend');
-              const grades = [1, 2, 3, 4];
+              const grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
               const labels = [];
               
-              div.innerHTML = '<h4>Fire Likelihood </h4><div style = background: linear-gradient(to right, #FFEDA0, #FED976, #FEB24C, #FD8D3C, #FC4E2A, #E31A1C, #BD0026, #800026); height: 15px; margin-bottom: 5px;"></div>';
+              div.innerHTML = '<h4>Risk Factor % </h4><div style="background: linear-gradient(to right, #FFEDA0, #FED976, #FEB24C, #FD8D3C, #FC4E2A, #E31A1C, #BD0026, #800026); height: 15px; margin-bottom: 5px;"></div>';
               
-              // Old Grading System
-              /*
               for (let i = 0; i < grades.length; i++) {
                 labels.push(
                   '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-                  grades[i] 
+                  grades[i] + (grades[i + 1] ? '–' + grades[i + 1] + '%' : '+')
                 );
               }
-              */
-
-              for (let i = 0; i < grades.length; i++) { 
-                let labelText = "";
-                
-                switch (grades[i]) {
-                    case 1:
-                        labelText = "Safe";
-                        break;
-                    case 2:
-                        labelText = "Caution";
-                        break;
-                    case 3:
-                        labelText = "Warning";
-                        break;
-                    case 4:
-                        labelText = "Danger";
-                        break;
-                    default:
-                        labelText = "Unknown"; // In case there are unexpected values
-                }
-            
-                labels.push(
-                    '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-                    grades[i] + " - " + labelText
-                );
-            }
-            
-
+              
               div.innerHTML += labels.join('<br>');
-              // Forecast bar
-             // div.innerHTML += '<h4>Forecast</h4><div id="forecast" style="padding: 5px; background: #f8f8f8; border-radius: 5px;">Loading...</div>';
+              div.innerHTML += '<h4>Forecast</h4><div id="forecast" style="padding: 5px; background: #f8f8f8; border-radius: 5px;">Loading...</div>';
               return div;
             }
           }
@@ -293,9 +253,7 @@ const MapComponent = () => {
             .setLatLng(popLocation)
             .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
             .openOn(map);
-            var tmp = getReq(e.latlng.lat, e.latlng.lng)
-            console.log(tmp)
-            getPredict(tmp)
+            getReq(e.latlng.lat, e.latlng.lng)
         });
         }
       } catch (error) {
@@ -323,7 +281,7 @@ const DynamicMap = dynamic(() => Promise.resolve(MapComponent), {
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center justify-between m-24">
       <h1 className="font-bold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl dark:text-blue-100 flex items-center gap-2">
         <span className="bg-gradient-to-b from-red-500 via-orange-400 to-green-500 bg-clip-text text-transparent">
           Heatmap
@@ -333,8 +291,8 @@ export default function Home() {
           River <Waves className="w-8 h-8 text-blue-400" />
         </span>
       </h1>
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <DynamicMap />
+      <div className="grid md:grid-cols-12 gap-5 p-4 m-2 z-10 w-full max-w-screen-lg items-center justify-between font-mono text-sm lg:flex">
+        <div className="w-full"><DynamicMap /></div>
       </div>
     </main>
   );
