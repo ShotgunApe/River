@@ -63,7 +63,7 @@ info.update = function (props) {
 };
 info.addTo(map);
 
-// Highlight feature on hover
+//Highlight feature on hover
 function highlightFeature(e) {
     var layer = e.target;
     layer.setStyle({
@@ -128,7 +128,7 @@ legend.onAdd = function () {
 };
 legend.addTo(map);
 
-// Function to fetch forecast data (simulated for now)
+// Function to fetch forecaslated for now)
 function updateForecast() {
     document.getElementById('forecast').innerHTML = 'Tomorrow: High of 85°F, Low of 65°F';
 }
