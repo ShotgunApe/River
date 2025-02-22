@@ -25,3 +25,9 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+#map {
+  width: 500px;
+  height: 100px;
+  background-color: powderblue;
+}
