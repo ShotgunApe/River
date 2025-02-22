@@ -11,6 +11,7 @@ To manage dependencies, Python uses virtual environments to prevent packages fro
 2. Create a virtual environment with ```py -3 -m venv .venv```
 3. Activate using ```.venv\bin\activate\```
 4. Install Flask with ```pip install flask```
+5. Install dependencies ```npm install```
 
 ### Mac OSX / Linux / WSL
 
@@ -18,6 +19,7 @@ To manage dependencies, Python uses virtual environments to prevent packages fro
 2. Create a virtual environment with ```python3 -m venv .venv```
 3. Activate using ```source .venv/bin/activate```
 4. Install Flask with ```pip install flask```
+5. Install dependencies ```npm install```
 
 ## Testing
 
