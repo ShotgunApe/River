@@ -21,6 +21,9 @@ To manage dependencies, Python uses virtual environments to prevent packages fro
 4. Install Flask with ```pip install flask```
 5. Install dependencies ```npm install```
 
+### Python Dependencies
+- Once the virtual environment is active, install ```requests``` with ```pip install requests```
+
 ## Testing
 
 ```npm run dev``` starts the server on ```localhost:3000```.
