@@ -135,7 +135,7 @@ const MapComponent = () => {
           };
 
           try {
-            const response = await fetch('/california_counties.geojson');
+            const response = await fetch('/cali-county-bounds.json');
             const data: GeoJSON.FeatureCollection = await response.json();
             const geojson = L.geoJSON(data, {
               style: style,
