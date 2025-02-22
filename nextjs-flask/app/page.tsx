@@ -5,6 +5,8 @@ import type { Map as LeafletMap, LatLngBoundsExpression, LatLngExpression, Contr
 
 import 'leaflet/dist/leaflet.css';
 
+import { getReq } from './utils/test'
+
 // Extended interfaces for proper typing
 interface CustomControl extends Control {
   _div?: HTMLElement;
@@ -209,6 +211,7 @@ const DynamicMap = dynamic(() => Promise.resolve(MapComponent), {
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+
       <h1>Heatmap by Rivers</h1>
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
         <DynamicMap />
