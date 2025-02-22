@@ -294,7 +294,7 @@ const MapComponent = () => {
             .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
             .openOn(map);
             var tmp = getReq(e.latlng.lat, e.latlng.lng)
-            console.log(tmp)
+            //console.log(tmp)
             getPredict(tmp)
         });
         }

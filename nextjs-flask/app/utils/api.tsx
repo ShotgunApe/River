@@ -1,11 +1,12 @@
-export const getReq = function (lat: string | number, lon: string | number) : any {
+export const getReq = async function (lat: string | number, lon: string | number) {
     if (lat && lon) {
         var latTwo = lat.toString().match(/^-?\d+(?:\.\d{0,4})?/)![0]
         var lonTwo = lon.toString().match(/^-?\d+(?:\.\d{0,4})?/)![0]
-        fetch("/api/get-weather?lat=" + latTwo + "&lon=" + lonTwo)
+        var json = await fetch("/api/get-weather?lat=" + latTwo + "&lon=" + lonTwo)
         .then(response => {
-            return response
-        })  
+            response.json();
+        })
+        return json;
     }
 };
 
