@@ -11,7 +11,9 @@ app = Flask(__name__)
 def weather():
     lat = str(request.args.get('lat'))
     lon = str(request.args['lon'])
-    return requests.get(f'https://api.weather.gov/points/{lat},{lon}').content
+    file = str(requests.get(f'https://api.weather.gov/points/{lat},{lon}').content)
+    return file
+
 
 # Load the trained model
 

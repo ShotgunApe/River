@@ -261,8 +261,9 @@ const MapComponent = () => {
             .setLatLng(popLocation)
             .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
             .openOn(map);
-            getReq(e.latlng.lat, e.latlng.lng)
-            getPredict()
+            var tmp = getReq(e.latlng.lat, e.latlng.lng)
+            console.log(tmp)
+            getPredict(tmp)
         });
         }
       } catch (error) {
