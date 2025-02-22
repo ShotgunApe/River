@@ -5,7 +5,7 @@ import type { Map as LeafletMap, LatLngBoundsExpression, LatLngExpression, Contr
 
 import 'leaflet/dist/leaflet.css';
 
-import { getReq } from './utils/test'
+import { getReq } from './utils/api'
 
 // Extended interfaces for proper typing
 interface CustomControl extends Control {
@@ -249,6 +249,14 @@ const MapComponent = () => {
           map.on('drag', () => {
             map.panInsideBounds(californiaBounds, { animate: true });
           });
+          map.on('click', function(e) {        
+            var popLocation= e.latlng;
+            var popup = L.popup()
+            .setLatLng(popLocation)
+            .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
+            .openOn(map);
+            getReq(e.latlng.lat, e.latlng.lng)
+        });
         }
       } catch (error) {
         console.error('Error initializing map:', error);

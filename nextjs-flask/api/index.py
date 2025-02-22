@@ -1,7 +1,10 @@
 import requests
-from flask import Flask
+from flask import Flask, request
 app = Flask(__name__)
 
-@app.route("/api/get_weather", methods=['GET'])
+# API call to grab weather
+@app.route("/api/get-weather", methods=['GET'])
 def weather():
-    return requests.get('https://api.weather.gov/points/39.7456,-97.0892').content
+    lat = str(request.args.get('lat'))
+    lon = str(request.args['lon'])
+    return requests.get(f'https://api.weather.gov/points/{lat},{lon}').content
