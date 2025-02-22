@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { Map as LeafletMap, LatLngBoundsExpression, LatLngExpression, Control, GeoJSON } from 'leaflet';
 import { Waves } from "lucide-react";
+import chroma from 'chroma-js';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -95,8 +96,7 @@ const MapComponent = () => {
                            risk > 0  ? '#32CD32' :
                                 '#006400';
           }; 
-
-
+          
           const style = (feature: GeoJSON.Feature): L.PathOptions => {
             return {
               fillColor: getColor(feature.properties?.riskfactor || 1),
@@ -108,8 +108,31 @@ const MapComponent = () => {
             };
           };
           
-    
+          
 
+/*
+const getColor = (risk: number): string => {
+  // Define color stops for risk levels
+  const colors = ['#32CD32', '#FFFF00', '#FFA500', '#FF0000', '#8B0000'];
+
+  // Define the scale (0-5 risk factor range)
+  const scale = chroma.scale(colors).domain([0, 5]);
+
+  // Ensure risk value stays in the range
+  return scale(Math.min(Math.max(risk, 0), 5)).hex();
+};
+
+const style = (feature: GeoJSON.Feature): L.PathOptions => {
+  return {
+    fillColor: getColor(feature.properties?.riskfactor || 0),
+    weight: 2,
+    opacity: 1,
+    color: 'white',
+    dashArray: '3',
+    fillOpacity: 0.7
+  };
+};
+*/
 
           // Initialize info control using the custom class
           const info = new InfoControl({ position: 'topright' });
