@@ -44,6 +44,8 @@ const MapComponent = () => {
               this.update();
               return this._div;
             }
+
+            // Dont touch. Thanks :)
             /*
             update(props?: any) {
               if (!this._div) return;
@@ -55,8 +57,8 @@ const MapComponent = () => {
             update(props?: any) {
               if (!this._div) return;
               this._div.innerHTML = '<h4>California Wild Fire Watch</h4>'+
-              (props ? `<b>County: ${props.name}</b><br>Fire Likelihood: ${props.risk}%` : 'Hover over a county');
-
+           // (props ? `<b>County: ${props.name}</b><br>Fire Likelihood: ${props.risk}%` : 'Hover over a county');
+              (props ? `<b>County: ${props.CountyName}</b><br>Fire Likelihood: ${props.risk}%` : 'Hover over a county');
             }
 
           }
@@ -177,10 +179,13 @@ const MapComponent = () => {
             layer.on({
               mouseover: (e) => {
                 highlightFeature(e);
+                if (feature.properties?.Name) {
                 info.update({ 
-                  name: feature.properties?.name || "Unknown County", 
+               //name: feature.properties?.name || "Unknown County", 
+                 name: feature.properties?.County.Name || "Unknown County",
                   risk: feature.properties?.riskfactor || "N/A" 
                 });
+              }
               },
               mouseout: (e) => {
                 resetHighlight(e);
