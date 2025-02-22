@@ -188,9 +188,9 @@ const MapComponent = () => {
             var popLocation= e.latlng;
             var popup = L.popup()
             .setLatLng(popLocation)
-            .setContent('<p>' + e.latlng + '</p>')
+            .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
             .openOn(map);
-            getReq()
+            getReq(e.latlng.lat, e.latlng.lng)
         });
         }
       } catch (error) {
