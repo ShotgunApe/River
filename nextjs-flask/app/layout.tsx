@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'California Temperature Map',
-  description: 'Interactive temperature map of California counties',
+  title: 'California WildFire Risk Map',
+  description: 'Interactive WildFire Risk Map of California counties',
 }
 
 export default function RootLayout({

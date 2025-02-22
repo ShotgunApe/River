@@ -38,7 +38,7 @@ body {
   font: 14px/16px Arial, Helvetica, sans-serif;
   background: white;
   background: rgba(255,255,255,0.8);
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  box-shadow: 0 0 15px rgba(10, 10, 10, 0.2); 
   border-radius: 5px;
 }
 .info h4 {
@@ -47,7 +47,7 @@ body {
 }
 .legend {
   line-height: 18px;
-  color: #555;
+  color: #555; 
 }
 .legend i {
   width: 18px;
@@ -55,4 +55,14 @@ body {
   float: left;
   margin-right: 8px;
   opacity: 0.7;
+}
+/*Extra*/
+.county-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: black;
+  text-shadow: 1px 1px 2px white;
+  background: none;
+  border: none;
+  padding: 2px;
 }

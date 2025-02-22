@@ -43,12 +43,21 @@ const MapComponent = () => {
               this.update();
               return this._div;
             }
+            /*
+            update(props?: any) {
+              if (!this._div) return;
+              this._div.innerHTML = '<h4>California Counties WildFire Watch</h4>' +
+                (props ? '<b>' + props.name + '</b><br />' + props.risk + '%' : 'Hover over a county');
+            }
+            */
 
             update(props?: any) {
               if (!this._div) return;
-              this._div.innerHTML = '<h4>California County Wild Fire and Temperatures Watch</h4>' +
-                (props ? '<b>' + props.name + '</b><br />' + props.temperature + '°F' : 'Hover over a county');
+              this._div.innerHTML = '<h4>California Wild Fire Risk</h4>' +
+                (props ? `<b>County: ${props.name}</b><br>Risk: ${props.risk}%` : 'Hover over a county');
+
             }
+
           }
 
           const californiaBounds: LatLngBoundsExpression = [
@@ -73,20 +82,23 @@ const MapComponent = () => {
             bounds: californiaBounds
           }).addTo(map);
 
-          const getColor = (temp: number): string => {
-            return temp > 100 ? '#800026' :
-                   temp > 90  ? '#BD0026' :
-                   temp > 80  ? '#E31A1C' :
-                   temp > 70  ? '#FC4E2A' :
-                   temp > 60  ? '#FD8D3C' :
-                   temp > 50  ? '#FEB24C' :
-                   temp > 40  ? '#FED976' :
-                              '#FFEDA0';
+          const getColor = (risk: number): string => {
+            return risk > 100 ? '#800026' :
+                   risk > 90  ? '#BD0026' :
+                   risk > 80  ? '#E31A1C' :
+                   risk > 70  ? '#FC4E2A' :
+                   risk > 60  ? '#FD8D3C' :
+                   risk > 50  ? '#FEB24C' :
+                   risk > 40  ? '#FEC764' :
+                   risk > 30  ? '#FFE68A' :
+                   risk > 20  ? '#FEE08F' :
+                   risk > 10  ? 'FFEDA0'  :
+                                 '#B8E186';
           };
 
           const style = (feature: GeoJSON.Feature): L.PathOptions => {
             return {
-              fillColor: getColor(feature.properties?.temperature || 0),
+              fillColor: getColor(feature.properties?.riskfactor || 0),
               weight: 2,
               opacity: 1,
               color: 'white',
@@ -128,6 +140,8 @@ const MapComponent = () => {
             map.fitBounds(e.target.getBounds());
           };
 
+          // Dont touch
+          /*
           const onEachFeature = (_feature: GeoJSON.Feature, layer: GeoJSONLayer) => {
             layer.on({
               mouseover: highlightFeature,
@@ -135,6 +149,57 @@ const MapComponent = () => {
               click: zoomToFeature
             });
           };
+          */
+          
+          // Dont touch
+          /*
+          const onEachFeature = (feature: GeoJSON.Feature, layer: GeoJSONLayer) => {
+            layer.on({
+              mouseover: (e) => {
+                highlightFeature(e);
+                info.update({ 
+                  name: feature.properties?.name || "Unknown County", 
+                  risk: feature.properties?.riskfactor || "N/A" 
+                });
+              },
+              mouseout: (e) => {
+                resetHighlight(e);
+                info.update();
+              },
+              click: zoomToFeature
+            });
+          };
+          */
+
+          const onEachFeature = (feature: GeoJSON.Feature, layer: GeoJSONLayer) => {
+            // Attach event listeners for hover effects
+            layer.on({
+              mouseover: (e) => {
+                highlightFeature(e);
+                info.update({ 
+                  name: feature.properties?.name || "Unknown County", 
+                  risk: feature.properties?.riskfactor || "N/A" 
+                });
+              },
+              mouseout: (e) => {
+                resetHighlight(e);
+                info.update();
+              },
+              click: zoomToFeature
+            });
+          
+            // Add county name as a permanent label
+            if (feature.properties?.name) {
+              layer.bindTooltip(feature.properties.name, { 
+                permanent: true,  // Always visible
+                direction: "center", // Centered inside the county
+                className: "county-label", // Custom CSS for styling
+              });
+            }
+          };
+          
+
+
 
           try {
             const response = await fetch('/cali-county-bounds.json');
@@ -152,15 +217,15 @@ const MapComponent = () => {
           class LegendControl extends L.Control {
             onAdd() {
               const div = L.DomUtil.create('div', 'info legend');
-              const grades = [40, 50, 60, 70, 80, 90, 100];
+              const grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
               const labels = [];
               
-              div.innerHTML = '<h4>Temperature (°F)</h4><div style="background: linear-gradient(to right, #FFEDA0, #FED976, #FEB24C, #FD8D3C, #FC4E2A, #E31A1C, #BD0026, #800026); height: 15px; margin-bottom: 5px;"></div>';
+              div.innerHTML = '<h4>Risk Factor % </h4><div style="background: linear-gradient(to right, #FFEDA0, #FED976, #FEB24C, #FD8D3C, #FC4E2A, #E31A1C, #BD0026, #800026); height: 15px; margin-bottom: 5px;"></div>';
               
               for (let i = 0; i < grades.length; i++) {
                 labels.push(
                   '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-                  grades[i] + (grades[i + 1] ? '–' + grades[i + 1] + '°F' : '+')
+                  grades[i] + (grades[i + 1] ? '–' + grades[i + 1] + '%' : '+')
                 );
               }
               
