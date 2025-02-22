@@ -47,15 +47,15 @@ const MapComponent = () => {
             /*
             update(props?: any) {
               if (!this._div) return;
-              this._div.innerHTML = '<h4>California Counties WildFire Watch</h4>' +
+              this._div.innerHTML = '<h4>California WildFire Watch</h4>' +
                 (props ? '<b>' + props.name + '</b><br />' + props.risk + '%' : 'Hover over a county');
             }
             */
 
             update(props?: any) {
               if (!this._div) return;
-              this._div.innerHTML = '<h4>California Wild Fire Risk</h4>' +
-                (props ? `<b>County: ${props.name}</b><br>Risk: ${props.risk}%` : 'Hover over a county');
+              this._div.innerHTML = '<h4>California Wild Fire Watch</h4>'+
+              (props ? `<b>County: ${props.name}</b><br>Fire Likelihood: ${props.risk}%` : 'Hover over a county');
 
             }
 
@@ -221,7 +221,7 @@ const MapComponent = () => {
               const grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
               const labels = [];
               
-              div.innerHTML = '<h4>Risk Factor % </h4><div style="background: linear-gradient(to right, #FFEDA0, #FED976, #FEB24C, #FD8D3C, #FC4E2A, #E31A1C, #BD0026, #800026); height: 15px; margin-bottom: 5px;"></div>';
+              div.innerHTML = '<h4>Fire Likelihood </h4><div style = background: linear-gradient(to right, #FFEDA0, #FED976, #FEB24C, #FD8D3C, #FC4E2A, #E31A1C, #BD0026, #800026); height: 15px; margin-bottom: 5px;"></div>';
               
               for (let i = 0; i < grades.length; i++) {
                 labels.push(
