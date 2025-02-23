@@ -1,3 +1,4 @@
 .next
+.venv
 *.cache
 node_modules
