@@ -15,6 +15,7 @@ gunicorn
 # pytz==2025.1
 requests==2.32.3
 scikit-learn==1.6.1
+flask-cors
 # scipy==1.15.2
 # six==1.17.0
 # threadpoolctl==3.5.0
