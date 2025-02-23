@@ -46,3 +46,6 @@ def predict():
         return response
     except Exception as e:
         return {"error": str(e)}
+    
+
+

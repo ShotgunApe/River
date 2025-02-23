@@ -78,7 +78,7 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
                     '#006400';
           }; 
 
-          const style = (feature: GeoJSON.Feature): L.PathOptions => {
+          const style = (feature: any): any => {
             const countyName = feature.properties?.CountyName;
         
             // Ensure countyColors is updated
@@ -105,17 +105,6 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
 
           const highlightFeature = (e: { target: GeoJSONLayer }) => {
             const layer = e.target;
-
-            layer.setStyle({
-              weight: 5,
-              color: '#666',
-              dashArray: '',
-              fillOpacity: 0.7
-            });
-
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-              layer.bringToFront();
-            }
 
             info.update(layer.feature?.properties);
           };
