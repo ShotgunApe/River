@@ -3,7 +3,8 @@ import { Waves } from "lucide-react";
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import MapComponent from '@/components/MapComponent';
- 
+import WeatherInfoCard from "@/components/WeatherInfoCard";
+
 export default function Home() {
   const [county, setCounty] = useState("");
 
@@ -23,14 +24,18 @@ export default function Home() {
           Click on the county to get a real-time wildfire prediction
         </span>
       </h2>
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <MapComponent setCounty={setCounty} />
-      </div>
-      {county && (
-        <div className="mt-4 text-lg font-semibold text-blue-600">
-          Selected County: {county}
+      <div className="flex flex-col items-center justify-between w-full">
+        <div className="z-10 w-full max-w-7xl flex flex-row items-start space-x-4 justify-center">
+          {county && (
+            <div className="flex-shrink-0">
+              <WeatherInfoCard county={county} setCounty={setCounty} />
+            </div>
+          )}
+          <div className="w-[800px] h-[600px]">
+            <MapComponent setCounty={setCounty} />
+          </div>
         </div>
-      )}
+      </div>
     </main>
   );
 }
