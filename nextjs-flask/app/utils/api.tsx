@@ -10,18 +10,60 @@ export const getReq = async function (lat: string | number, lon: string | number
         .then(data => {
 
             type trenches = {
-                weather: string
+                PRECIPITATION: number,
+                MAX_TEMP: number,
+                MIN_TEMP: number,
+                AVG_WIND_SPEED: number,
+                YEAR: number,
+                TEMP_RANGE: number,
+                WIND_TEMP_RATIO: number,
+                MONTH: number,
+                LAGGED_PRECIPITATION: number,
+                LAGGED_AVG_WIND_SPEED: number,
+                DAY_OF_YEAR: number,
+                Fall: number,
+                Spring: number,
+                Summer: number,
+                Winter: number
             }
 
-            let params = data["properties"]
-
-            const u = new URLSearchParams(params).toString();
-            
-            fetch("/api/predict?data=" + params)
+            // API Call #2 to get weather data
+            let forecastAPI = data["properties"]["forecast"]
+            fetch(String(forecastAPI))
             .then(response => response.json())  
-            .then(json => {
-                console.log(json);
-            })
+            .then(data => {
+                let rain = data["properties"]["periods"][0]["probabilityOfPrecipitation"]["value"]
+                let toSend: trenches = {
+                    "PRECIPITATION": rain,
+                    "MAX_TEMP": 0,
+                    "MIN_TEMP": 0,
+                    "AVG_WIND_SPEED": 0,
+                    "YEAR": 0,
+                    "TEMP_RANGE": 0,
+                    "WIND_TEMP_RATIO": 0,
+                    "MONTH": 0,
+                    "LAGGED_PRECIPITATION": 0,
+                    "LAGGED_AVG_WIND_SPEED": 0,
+                    "DAY_OF_YEAR": 0,
+                    "Fall": 0,
+                    "Spring": 0,
+                    "Summer": 0,
+                    "Winter": 0
+                };
+                
+                postReq(JSON.stringify(toSend))
+            });
         })
     }
+};
+
+export const postReq = async function (file: string) {
+    const response = await fetch("/api/predict", {
+        method: 'POST',
+        body: file,
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then((rests) => {
+        console.log(rests)
+    });
 };
