@@ -277,7 +277,35 @@ const MapComponent = () => {
                 resetHighlight(e);
                 info.update();
               },
-              click: zoomToFeature
+              // old click feature
+              // click: zoomToFeature
+
+              // new 
+              
+              click: (e) => {
+                zoomToFeature(e); // Keep zoom-in functionality
+          
+                // Remove previous marker if it exists
+                if (mapRef.current!.pinMarker) {
+                  mapRef.current!.removeLayer(mapRef.current!.pinMarker);
+                }
+          
+                // Add a blue pin icon at the clicked location
+                const pinMarker = L.marker(e.latlng, {
+                  icon: L.icon({
+                    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Map_marker.svg/1200px-Map_marker.svg.png',  // Blue pin icon
+                    iconSize: [32, 32], 
+                    iconAnchor: [16, 32], 
+                  })
+                }).addTo(mapRef.current!);
+          
+                // Store reference to remove later
+                mapRef.current!.pinMarker = pinMarker;
+              }
+                
+
+              
+              // end
             });
 
             // Add county name as a permanent label
