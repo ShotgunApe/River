@@ -101,8 +101,19 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
           info.addTo(map);
           infoRef.current = info;
 
-          const highlightFeature = (e: { target: GeoJSONLayer }) => {
+          const highlightFeature = (e: { target: any }) => {
             const layer = e.target;
+
+            layer.setStyle({
+              weight: 5,
+              color: '#666',
+              dashArray: '',
+              fillOpacity: 0.7
+            });
+
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+            }
 
             info.update(layer.feature?.properties);
           };
