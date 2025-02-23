@@ -1,5 +1,3 @@
-
-
 export const getReq = async function (lat: string | number, lon: string | number) {
     if (lat && lon) {
         //Truncate anything beyond four decimal places for API
@@ -95,7 +93,6 @@ export const getReq = async function (lat: string | number, lon: string | number
         })
     }
 };
-
 
 export const postReq = async function (data: any) {
     try {

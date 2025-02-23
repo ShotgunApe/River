@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import type { Map as LeafletMap, LatLngBoundsExpression } from 'leaflet';
-import { getReq, getPredict } from '@/app/utils/api';
+import { getReq } from '@/app/utils/api';
 import { countyColors } from '@/data/county';
 import { MapProps, CustomControl, GeoJSONLayer } from '@/utils/interface';
 
@@ -224,9 +224,7 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
             .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
             .openOn(map);
             setCounty("San Francisco")
-            var tmp = getReq(e.latlng.lat, e.latlng.lng)
-            console.log(tmp)
-            getPredict(tmp)
+            getReq(e.latlng.lat, e.latlng.lng)
         });
         }
       } catch (error) {
