@@ -1,29 +1,28 @@
 {
-  "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
+  "functions": {
+    "api/**": {
+      "memory": 1024,
+      "maxDuration": 60
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/index.py"
+      "dest": "/api/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/$1"
-    },
-    {
-      "functions": {
-        "api/**": {
-          "excludeFiles": "{.next,*.cache,node_modules,public,app}/**"
-        }
-      }
     }
+  ],
+  "excludeFiles": [
+    ".next/**",
+    "*.cache/**",
+    "node_modules/**",
+    "public/**",
+    "app/**",
+    "src/**/*.{jpg,png,svg}",
+    "*.test.js",
+    "*.spec.js"
   ]
 }
