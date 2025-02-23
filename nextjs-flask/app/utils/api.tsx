@@ -3,7 +3,7 @@ export const getReq = async function (lat: string | number, lon: string | number
         var latTwo = lat.toString().match(/^-?\d+(?:\.\d{0,4})?/)![0]
         var lonTwo = lon.toString().match(/^-?\d+(?:\.\d{0,4})?/)![0]
         
-        const response = await fetch("/api/get-weather?lat=" + latTwo + "&lon=" + lonTwo)
+        const response = await fetch("https://river-be.onrender.com/api/get-weather?lat=" + latTwo + "&lon=" + lonTwo)
         const data = await response.json();
 
         let forecastAPI = data["properties"]["forecast"];
@@ -60,7 +60,7 @@ export const getReq = async function (lat: string | number, lon: string | number
 
 export const postReq = async function (data: any) {
     try {
-        const response = await fetch("/api/predict", {
+        const response = await fetch("https://river-be.onrender.com/api/predict", {
             method: "POST",
             body: JSON.stringify({ features: Object.values(data) }), // Convert object to array
             headers: { "Content-Type": "application/json" },
