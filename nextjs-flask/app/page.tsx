@@ -7,6 +7,7 @@ import WeatherInfoCard from "@/components/WeatherInfoCard";
 
 export default function Home() {
   const [county, setCounty] = useState("");
+  const [countyProb, setCountyProb] = useState("");
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -28,11 +29,11 @@ export default function Home() {
         <div className="z-10 w-full max-w-7xl flex flex-row items-start space-x-4 justify-center">
           {county && (
             <div className="flex-shrink-0">
-              <WeatherInfoCard county={county} setCounty={setCounty} />
+              <WeatherInfoCard county={county} setCounty={setCounty} countyProb={countyProb} />
             </div>
           )}
           <div className="w-[800px] h-[600px]">
-            <MapComponent setCounty={setCounty} />
+            <MapComponent setCounty={setCounty} setCountyProb={setCountyProb} />
           </div>
         </div>
       </div>

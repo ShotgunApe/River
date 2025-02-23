@@ -8,7 +8,7 @@ import { countyColors, updateCountyColors } from '@/data/county';
 import { MapProps, CustomControl, GeoJSONLayer } from '@/utils/interface';
 
 
-const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
+const MapComponent: React.FC<MapProps> = ({ setCounty, setCountyProb }) =>{
   const mapRef = useRef<LeafletMap | null>(null);
   const geojsonRef = useRef<L.GeoJSON | null>(null);
   const infoRef = useRef<CustomControl | null>(null);
@@ -228,8 +228,11 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
             map.panInsideBounds(californiaBounds, { animate: true });
           });
           //County Click
-          map.on('click', function(e) {        
+          map.on('click', async function(e) {
+            var prediction = await getReq(e.latlng.lat, e.latlng.lng);
+            console.log(prediction)
             setCounty(countyNameGlob)
+            setCountyProb(prediction)
         });
         }
       } catch (error) {
@@ -251,7 +254,7 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
   return (
     <div>
       {loading ? (
-        <div className="loading-spinner" style={{ color: 'white' }}>Loading...</div>
+        <div className="loading-spinner" style={{ color: 'white' }}></div>
       ) : (
         <div id="map" style={{ height: '600px', width: '100%' }}></div>
       )}

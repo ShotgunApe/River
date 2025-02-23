@@ -12,4 +12,5 @@ export interface GeoJSONLayer extends L.Layer {
 
 export interface MapProps  {
   setCounty: (value: string) => void;
+  setCountyProb: (value: any) => void;
 }
