@@ -2,8 +2,8 @@ import requests
 from flask import Flask, request
 import os
 import joblib
-import pandas as pd
 import json
+import numpy as np
 
 app = Flask(__name__)
 
@@ -17,11 +17,9 @@ def weather():
     return data
 
 # Load the trained model
-
 file_path = os.path.join(os.path.dirname(__file__), "rf_model.pkl")
 model = joblib.load(file_path)
 
- 
 # Feature names (same as used during training)
 feature_names = [
     "PRECIPITATION", "MAX_TEMP", "MIN_TEMP", "AVG_WIND_SPEED", "YEAR",
@@ -34,18 +32,15 @@ def predict():
     data = request.get_json()
     
     try:
-        # Convert input data to DataFrame
-        X_test = pd.DataFrame([data["features"]], columns=feature_names)
+        # Convert input data to numpy array
+        X_test = np.array([data["features"]])
         # Get probability of True (class 1)
         probability = model.predict_proba(X_test)[0][1]
         response = app.response_class(
-            response=json.dumps({"prediction_probability": probability}),
+            response=json.dumps({"prediction_probability": float(probability)}),
             status=200,
             mimetype='application/json'
         )
         return response
     except Exception as e:
         return {"error": str(e)}
-    
-
-
