@@ -3,6 +3,7 @@ from flask import Flask, request
 import os
 import joblib
 import pandas as pd
+import json
 
 app = Flask(__name__)
 
@@ -10,10 +11,10 @@ app = Flask(__name__)
 @app.route("/api/get-weather", methods=['GET'])
 def weather():
     lat = str(request.args.get('lat'))
-    lon = str(request.args['lon'])
-    file = str(requests.get(f'https://api.weather.gov/points/{lat},{lon}').content)
-    return file
-
+    lon = str(request.args.get('lon'))
+    response = requests.get(f'https://api.weather.gov/points/{lat},{lon}')
+    data = response.json()
+    return data
 
 # Load the trained model
 
@@ -28,16 +29,20 @@ feature_names = [
     "LAGGED_AVG_WIND_SPEED", "DAY_OF_YEAR", "Fall", "Spring", "Summer", "Winter"
 ]
 
-@app.route("/api/predict", methods=['GET'])
+@app.route("/api/predict", methods=['GET', 'POST'])
 def predict():
-    data = {
-    "features": [0.0, 69.0, 58.0, 6.49, 1989, 11.0, 0.094058, 4, 0.00, 7.285714, 250, 1.0, 0.0, 0.0, 0.0]
-    }
+    data = request.get_json()
+    
     try:
         # Convert input data to DataFrame
         X_test = pd.DataFrame([data["features"]], columns=feature_names)
         # Get probability of True (class 1)
         probability = model.predict_proba(X_test)[0][1]
-        return {"prediction_probability": probability}
+        response = app.response_class(
+            response=json.dumps({"prediction_probability": probability}),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
     except Exception as e:
         return {"error": str(e)}
