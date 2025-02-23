@@ -14,6 +14,8 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
   const infoRef = useRef<CustomControl | null>(null);
   const [loading, setLoading] = useState(true)
 
+  var countyNameGlob = ""
+
   useEffect(() => {
     const loadMap = async () => {
       try {
@@ -39,8 +41,9 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
 
             update(props?: any) {
               if (!this._div) return;
-              this._div.innerHTML = '<h4>California Wild Fire Watch</h4>'+
-              (props ? `<b>County: ${props.CountyName}</b>` : 'Hover over a county in Cali');
+              this._div.innerHTML = '<h4>California Wildfire Watch</h4>'+
+              (props ? `<b>County: ${props.CountyName}</b>` : 'Hover over a county');
+              countyNameGlob = props?.CountyName;
             }
 
           }
@@ -229,9 +232,9 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
             var popLocation= e.latlng;
             var popup = L.popup()
             .setLatLng(popLocation)
-            .setContent('<p> Lat, Lon : ' + e.latlng.lat + ", " + e.latlng.lng + '</p>')
+            .setContent('<p>' + '</p>')
             .openOn(map);
-            setCounty("San Francisco")
+            setCounty(countyNameGlob)
             getReq(e.latlng.lat, e.latlng.lng)
         });
         }
