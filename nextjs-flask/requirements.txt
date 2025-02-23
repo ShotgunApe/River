@@ -3,17 +3,16 @@
 # charset-normalizer==3.4.1
 # click==8.1.8
 Flask==3.0.3
-requests
 # idna==3.10
 # itsdangerous==2.2.0
 # Jinja2==3.1.5
-# joblib==1.4.2
+joblib==1.4.2
 # MarkupSafe==3.0.2
 # numpy==2.2.3
-# pandas==2.2.3
+pandas==2.2.3
 # python-dateutil==2.9.0.post0
 # pytz==2025.1
-# requests==2.32.3
+requests==2.32.3
 # scikit-learn==1.6.1
 # scipy==1.15.2
 # six==1.17.0
