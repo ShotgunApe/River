@@ -1,10 +1,10 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import type { Map as LeafletMap, LatLngBoundsExpression } from 'leaflet';
 import { getReq } from '@/app/utils/api';
-import { countyColors } from '@/data/county';
+import { countyColors, updateCountyColors } from '@/data/county';
 import { MapProps, CustomControl, GeoJSONLayer } from '@/utils/interface';
 
 
@@ -12,10 +12,13 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
   const mapRef = useRef<LeafletMap | null>(null);
   const geojsonRef = useRef<L.GeoJSON | null>(null);
   const infoRef = useRef<CustomControl | null>(null);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const loadMap = async () => {
       try {
+        await updateCountyColors()
+        setLoading(false);
         if (typeof window !== 'undefined' && !mapRef.current) {
           const L = (await import('leaflet')).default;
 
@@ -76,9 +79,16 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
           }; 
 
           const style = (feature: GeoJSON.Feature): L.PathOptions => {
-            const countyName = feature.properties?.CountyName; 
-            const riskLevel = countyColors[countyName] ?? feature.properties?.riskfactor ?? 1; // Use assigned risk or default
-          
+            const countyName = feature.properties?.CountyName;
+        
+            // Ensure countyColors is updated
+            if (Object.keys(countyColors).length === 0) {
+              return {}; // Or return a default style until processing is complete
+            }
+        
+            // Get the risk level from countyColors or fallback to the feature's riskfactor
+            const riskLevel = countyColors[countyName] ?? feature.properties?.riskfactor ?? 1;
+        
             return {
               fillColor: getColor(riskLevel), // Automatically sets the color
               weight: 2,
@@ -177,16 +187,16 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
 
                 switch (grades[i]) {
                     case 1:
-                        labelText = "Safe";
+                        labelText = "Safe: 0-30%";
                         break;
                     case 2:
-                        labelText = "Caution";
+                        labelText = "Caution: 30-60%";
                         break;
                     case 3:
-                        labelText = "Warning";
+                        labelText = "Warning: 60-85%";
                         break;
                     case 4:
-                        labelText = "Danger";
+                        labelText = "Danger: 85-100%";
                         break;
                     default:
                         labelText = "Unknown"; // In case there are unexpected values
@@ -241,8 +251,17 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
     };
   }, []);
 
+  
+
   return (
-    <div id="map" style={{ height: '600px', width: '100%' }}></div>
+    <div>
+      {loading ? (
+        <div className="loading-spinner" style={{ color: 'white' }}>Loading...</div>
+      ) : (
+        <div id="map" style={{ height: '600px', width: '100%' }}></div>
+      )}
+    </div>
+    
   );
 }
 
