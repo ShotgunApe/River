@@ -67,8 +67,6 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
             bounds: californiaBounds
           }).addTo(map);
 
-          // New way to change counties colors 
-          // Hard coding
           const getColor = (risk: number): string => {
             return risk > 4  ? '#8B0000' :
                     risk > 3  ? '#FF0000' :
@@ -90,7 +88,7 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
             const riskLevel = countyColors[countyName] ?? feature.properties?.riskfactor ?? 1;
         
             return {
-              fillColor: getColor(riskLevel), // Automatically sets the color
+              fillColor: getColor(riskLevel), 
               weight: 2,
               opacity: 1,
               color: 'white',
@@ -188,7 +186,7 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
                         labelText = "Danger: 85-100%";
                         break;
                     default:
-                        labelText = "Unknown"; // In case there are unexpected values
+                        labelText = "Unknown"; 
                 }
 
                 labels.push(
