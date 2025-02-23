@@ -27,7 +27,7 @@ Technology & Approach:
 - Also there were an other dataset used in this project:
     1. A large dataset from Wifire Commons to get the coordinates of all the counties boundaries
             [WifireCommons](https://wifire-data.sdsc.edu/nl/dataset/counties-in-california/resource/1dba9680-5ed6-4061-b070-165d394b0508?inner_span=True).
-
+- To predict using the model, we use the ```weather.gov``` API to get the current forecast for a particular area. This is then fed into the pre-trained model.
 
 ### Deployment 
 - You can find the application [here](https://river-dpr6.onrender.com/).
