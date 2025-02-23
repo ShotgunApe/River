@@ -229,13 +229,7 @@ const MapComponent: React.FC<MapProps> = ({ setCounty }) =>{
           });
           //County Click
           map.on('click', function(e) {        
-            var popLocation= e.latlng;
-            var popup = L.popup()
-            .setLatLng(popLocation)
-            .setContent('<p>' + '</p>')
-            .openOn(map);
             setCounty(countyNameGlob)
-            getReq(e.latlng.lat, e.latlng.lng)
         });
         }
       } catch (error) {
