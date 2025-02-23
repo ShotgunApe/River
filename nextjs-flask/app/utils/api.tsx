@@ -1,3 +1,5 @@
+
+
 export const getReq = async function (lat: string | number, lon: string | number) {
     if (lat && lon) {
         //Truncate anything beyond four decimal places for API
@@ -51,19 +53,28 @@ export const getReq = async function (lat: string | number, lon: string | number
                     "Winter": 0
                 };
                 
-                postReq(JSON.stringify(toSend))
+                postReq(toSend)
             });
         })
     }
 };
 
-export const postReq = async function (file: string) {
-    const response = await fetch("/api/predict", {
-        method: 'POST',
-        body: file,
-        headers: {'Content-Type': 'application/json'}
-    })
-    .then((rests) => {
-        console.log(rests)
-    });
+
+export const postReq = async function (data: any) {
+    try {
+        console.log({ features: Object.values(data) })
+        const response = await fetch("/api/predict", {
+            method: "POST",
+            body: JSON.stringify({ features: Object.values(data) }), // Convert object to array
+            headers: { "Content-Type": "application/json" },
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        console.log(responseData);
+    } catch (error) {
+        console.error("Error:", error);
+    }
 };
